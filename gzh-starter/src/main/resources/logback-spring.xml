@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+
+    <springProperty scope="context"
+                    name="myAppName"
+                    source="spring.application.name"
+                    defaultValue="gzh"/>
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <!--    控制台打印配置    -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}}</pattern>
+            <charset>utf-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH}/${myAppName}-error.log</File>
+        <encoder>
+            <pattern>%d [%level] [%thread] %logger{15}:%line %msg%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/gzh-error.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>1</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <appender name="error-async" class="ch.qos.logback.classic.AsyncAppender">
+        <!--默认情况下，当BlockingQueue还有20%容量，
+            他将丢弃TRACE、DEBUG和INFO级别的event，只保留WARN和ERROR级别的event。
+            为了保持所有的events，设置该值为0。-->
+        <discardingThreshold>0</discardingThreshold>
+        <!--默认值256-->
+        <queueSize>512</queueSize>
+        <!--调用者信息，性能消耗比较大，慎用-->
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="error"/>
+    </appender>
+
+    <logger name="com.goingao" level="trace" additivity="false">
+        <!--引用控制台打印配置-->
+        <appender-ref ref="console"/>
+        <appender-ref ref="error-async" level="error"/>
+    </logger>
+
+</configuration>
