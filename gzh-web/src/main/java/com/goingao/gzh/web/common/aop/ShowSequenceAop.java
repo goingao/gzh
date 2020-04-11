@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class ShowSequenceAop {
 
-    @Pointcut(value = "within(com.goingao.gzh.web.*.controller..*)")
+    @Pointcut(value = "within(com.goingao.gzh.web.user.controller..*)")
     public void showSequenceCut() {
     }
 

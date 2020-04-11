@@ -21,7 +21,7 @@ import java.lang.reflect.Method;
 @Slf4j
 public class WebLogAop {
 
-    @Pointcut(value = "within(com.goingao.gzh.web.*.controller..*)")
+    @Pointcut(value = "within(com.goingao.gzh.web.user.controller..*)")
     public void logPointCut() {
     }
 
